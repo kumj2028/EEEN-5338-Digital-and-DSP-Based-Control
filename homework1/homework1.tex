@@ -154,7 +154,7 @@ Taking the derivative of (4) and substituting in the results from (6) and (7), w
 \end{equation}
 \end{problem}
 \pagebreak
-\begin{problem}{2}
+\begin{problem}{3}
   Find the math model for the following system. (Note: \LaTeX \space doesn't have a good way of drawing rotational mechanical systems, so I am drawing an equivalent translational one instead).\\
   \begin{tikzpicture}[every node/.style={outer sep=0pt},thick,
     mass/.style={draw,thick},
@@ -191,10 +191,17 @@ Taking the derivative of (4) and substituting in the results from (6) and (7), w
     \begin{split}
       \sum{T} = J\alpha\\
       -k_1\theta_1+k_2(\theta_2-\theta_1)=J_1\ddot{\theta_1}\\
-      -k_2(\theta_2-\theta_1)+T=J_2\ddot{\theta_2}\\
-      J_1\ddot{\theta_1} + (k_1+k_2)\theta_1 - k_2\theta_2 = 0\\
-      J_2\ddot{\theta_2} - k_2\theta_1 + k_2\theta_2 = T\\
+      -k_2(\theta_2-\theta_1)+T=J_2\ddot{\theta_2}
     \end{split}
+   \end{equation}
+   \begin{equation}
+    \begin{split}
+    J_1\ddot{\theta_1} + (k_1+k_2)\theta_1 - k_2\theta_2 = 0\\
+    \implies \theta_2 = \frac{J_1\ddot{\theta_1}}{k_2} + \frac{(k_1+k_2)\theta_1}{k_2}
+    \end{split}
+   \end{equation}
+   \begin{equation}
+    J_2\ddot{\theta_2} - k_2\theta_1 + k_2\theta_2 = T
    \end{equation}
 
 \end{problem}
