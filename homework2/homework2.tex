@@ -1,0 +1,269 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Welcome to writeLaTeX --- just edit your LaTeX on the left,
+% and we'll compile it for you on the right. If you give
+% someone the link to this page, they can edit at the same
+% time. See the help menu above for more info. Enjoy!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{circuitikz}
+\usetikzlibrary{bending}
+\usetikzlibrary{patterns,decorations.pathmorphing,positioning}
+\usepackage{enumitem}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 2}%replace X with the appropriate number
+\author{Mengxiang Jiang\\ %replace with your name
+EEEN 5338 Digital and DSP Based Control} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{problem}{1} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
+    For each of the following equations, determine the order of the
+    equation and then test it for (i) linearity, (ii) time invariance, and (iii)
+    homogeneity.
+    \begin{enumerate}[label=\alph*.]
+        \item $y(k+2) = y(k+1)y(k) + u(k)$\\
+        This equation is 2nd order from the difference of $k+2$ and $k$.\\
+        It is not linear since $y(k+1)y(k)$ is not linear.\\
+        It is time invariant because all the coefficients are constant.\\
+        Since $u(k)$ is not 0, it is not homogeneous.
+
+        \item $y(k+3) + 2y(k) = 0$\\
+        This equation is 3rd order from the difference of $k+3$ and $k$.\\
+        It is linear, since all the functions are linear.\\
+        It is time invariant because all the coefficients are constant.\\
+        Since $u(k)$ is 0, it is homogeneous.
+        
+        \item $y(k+4) + y(k-1) = u(k)$\\
+        This equation is 5th order from the difference of $k+4$ and $k-1$.\\
+        It is linear, since all the functions are linear.\\
+        It is time invariant because all the coefficients are constant.\\
+        Since $u(k)$ is not 0, it is not homogeneous.
+
+        \item $y(k+5) = y(k+4) + u(k+1) - u(k)$\\
+        This equation is 5th order from the difference of $k+5$ and $k$.\\
+        It is linear, since all the functions are linear.\\
+        It is time invariant because all the coefficients are constant.\\
+        Since $u(k)$ is not 0, it is not homogeneous.
+
+        \item $y(k+2) = y(k)u(k)$\\
+        This equation is 2nd order from the difference of $k+2$ and $k$.\\
+        It is not linear, since $y(k)u(k)$ is not linear.\\
+        It is time invariant because all the coefficients are constant.\\
+        Since $u(k)$ is not 0, it is not homogeneous.
+    \end{enumerate}
+
+\end{problem}
+\pagebreak
+\begin{problem}{2} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
+    Solve the following difference equations. 
+    \begin{enumerate}[label=\alph*.]
+        \item $y(k+1)-0.8y(k)=0,\; y(0)=1$\\
+        \begin{align*}
+            zY(z)-z-0.8Y(z)=0\\
+            (z-0.8)Y(z)=z\\
+            Y(z) = \frac{z}{z-0.8}\\
+            f(k)=(0.8)^k,\;k\in \N
+        \end{align*}
+        \item $y(k+1)-0.8y(k)=1(k),\; y(0)=0$\\
+        \begin{align*}
+            zY(z)-0.8Y(z)=\frac{z}{z-1}\\
+            Y(z)=\frac{z}{(z-0.8)(z-1)}\\
+            z\left(\frac{1}{(z-0.8)(z-1)}\right)=z\left(\frac{A}{z-0.8}+\frac{B}{z-1}\right)\\
+            1 = (z-1)A + (z-0.8)B\\
+            z=1\implies 1=0.2B \implies B=5\\
+            z=0.8\implies 1=-0.2A \implies A=-5\\
+            Y(z)=\frac{-5z}{z-0.8} + \frac{5z}{z-1}\\
+            f(k)=-5(0.8)^k + 5,\;k\in \N
+        \end{align*}
+        \item $y(k+1)-0.8y(k)=1(k),\; y(0)=1$\\
+        \begin{align*}
+            zY(z)-z-0.8Y(z)=\frac{z}{z-1}\\
+            Y(z)=\frac{z}{z-0.8}+\frac{z}{(z-0.8)(z-1)}\\
+            \text{from partial fraction decomposition of part b we get:}\\
+            Y(z)=\frac{z}{z-0.8}+\frac{-5z}{z-0.8} + \frac{5z}{z-1}=\frac{-4z}{z-0.8} + \frac{5z}{z-1}\\
+            f(k)=-4(0.8)^k + 5,\;k\in \N
+        \end{align*}
+        \pagebreak
+        \item $y(k+2)+0.7y(k+1)+0.06y(k)=\delta(k),\; y(0)=0,\;y(1)=2$\\
+        \begin{align*}
+            z^2Y(z)+0.7zY(z)+0.06Y(z)=1+2z\\
+            Y(z)=\frac{2z+1}{z^2+0.7z+0.06}=\frac{2z+1}{(z+0.1)(z+0.6)}\\
+            \frac{2z+1}{(z+0.1)(z+0.6)} = \frac{A}{z+0.1}+\frac{B}{z+0.6}\\
+            2z+1=(z+0.6)A+(z+0.1)B\\
+            z=-0.6\implies -0.2 = -0.5B \implies B=0.4\\
+            z=-0.1\implies 0.8=0.5A \implies A = 1.6\\
+            Y(z) = \frac{1.6}{z+0.1}+\frac{0.4}{z+0.6}\\
+            \text{this is not in the table, but we can try decomposing $\frac{Y(z)}{z}$ instead:}\\
+            \frac{Y(z)}{z}=\frac{2z+1}{z(z+0.1)(z+0.6)}\\
+            \frac{2z+1}{z(z+0.1)(z+0.6)} = \frac{A}{z} + \frac{B}{z+0.1}+\frac{C}{z+0.6}\\
+            2z+1=(z+0.1)(z+0.6)A+z(z+0.6)B+z(z+0.1)C\\
+            z=0\implies 1 = 0.06A \implies A = \frac{100}{6}=\frac{50}{3}\\
+            z=-0.1\implies 0.8 = -0.05B \implies B = -16\\
+            z=-0.6\implies -0.2 = 0.3C\implies C = -\frac{2}{3}\\
+            \frac{Y(z)}{z}=\frac{\frac{50}{3}}{z} + \frac{-16}{z+0.1} + \frac{-\frac{2}{3}}{z+0.6}\\
+            Y(z)=\frac{50}{3} +\frac{-16z}{z+0.1}+\frac{-\frac{2}{3}z}{z+0.6}\\
+            f(k)=\frac{50}{3}\delta(k) -16(-0.1)^k-\frac{2}{3}(-0.6)^k,\;k\in \N
+        \end{align*}
+    \end{enumerate}
+\end{problem}
+\pagebreak
+\begin{problem}{3}
+    Given the discrete-time system
+    $$y(k+2)-y(k)=2u(k)$$
+    find the impulse response of the system $g(k)$:
+    \begin{enumerate}[label=\alph*.]
+        \item From the difference equation
+        \begin{align*}
+            k = -2 \implies y(0) - y(-2) = 0,\;\text{assuming y is causal}\implies y(0) = 0\\
+            k = -1 \implies y(1) - y(-1) = 0 \implies y(1) = 0\\
+            k = 0 \implies y(2) - y(0) = 2 \implies y(2) = 2\\
+            k = 1 \implies y(3) - y(1) = 0 \implies y(3) = y(1) = 0\\
+            k = 2 \implies y(4) - y(2) = 0 \implies y(4) = y(2) = 2\\
+            g(k) = \begin{cases}
+                2 & \text{if $k > 0$ and $k$ is even}\\
+                0 & \text{otherwise}
+            \end{cases}
+        \end{align*}
+        \item Using z-transformation
+        \begin{align*}
+            z^2Y(z) - Y(z) = 2U(z)\\
+            G(z) = \frac{Y(z)}{U(z)} = \frac{2}{z^2-1} = \frac{2}{(z+1)(z-1)}\\
+            \frac{G(z)}{z} = \frac{2}{z(z+1)(z-1)} = \frac{A}{z}+\frac{B}{z+1}+\frac{C}{z-1}\\
+            2=(z+1)(z-1)A + z(z-1)B + z(z+1)C\\
+            z=0 \implies 2 = -A \implies A=-2\\
+            z=-1 \implies 2 =2B \implies B=1\\
+            z=1 \implies 2 = 2C \implies C=1\\
+            \frac{G(z)}{z} = \frac{-2}{z} + \frac{1}{z+1}+\frac{1}{z-1}\\
+            G(z) = -2 + \frac{z}{z+1} + \frac{z}{z-1}\\
+            g(k) = \begin{cases}
+                -2\delta(k) + (-1)^k + 1 & k\in \N\\
+                0 & k < 0
+            \end{cases} 
+        \end{align*}
+    \end{enumerate}
+\end{problem}
+\pagebreak
+\begin{problem}{4}
+    Find the impulse response functions for the systems governed by the
+    following difference equations.
+    \begin{enumerate}[label=\alph*.]
+        \item $y(k+1) - 0.5y(k)=u(k)$
+        \begin{align*}
+            zY(z)-0.5Y(z)=U(z)\\
+            G(z) = \frac{Y(z)}{U(z)} = \frac{1}{z-0.5}=z^{-1}\frac{z}{z-0.5}\\
+            g(k) = \begin{cases}
+                (0.5)^{k-1} & k \geq 1\\
+                0 & k<1
+            \end{cases}
+        \end{align*}
+        \item $y(k+2) - 0.1 y(k+1) + 0.8 y(k) = u(k)$
+        \begin{align*}
+            z^2Y(z)-0.1zY(z) + 0.8Y(z)=U(z)\\
+            G(z) = \frac{Y(z)}{U(z)} = \frac{1}{z^2-0.1z+0.8}\\
+            \text{does not look easily factorable, using the quadratic formula to find roots: }\\
+            z = \frac{0.1\pm\sqrt{0.01-3.2}}{2} = \frac{0.1\pm j\sqrt{3.19}}{2}\\
+            \text{the roots are complex conjugates, using $a^k\sin{bk}$ $z$-transform:}\\
+            \mathcal{Z}\{a^k\sin{bk}\} = \frac{az\sin{b}}{z^2-2az\cos{b}+a^2}\\
+            G(z) = z^{-1}\frac{z}{z^2-0.1z+0.8}\\
+            \text{and equating coefficients:}\\
+            a=\sqrt{0.8} \approx 0.894\\
+            \cos{b} = \frac{0.05}{\sqrt{0.8}} \approx 0.056\\
+            b = \cos^{-1}\left({\frac{0.05}{\sqrt{0.8}}}\right) \approx 1.515\\
+            \sin{b} \approx 0.998\\
+            \frac{1}{a\sin{b}} \approx 1.12\\
+            \implies g(k) = \begin{cases}
+                1.12(0.894)^{k-1}\sin(1.515(k-1)) & k \geq 1\\
+                0 & k < 1
+            \end{cases}
+        \end{align*}
+    \end{enumerate}
+\end{problem}
+\pagebreak
+\begin{problem}{5}
+    Find the steady-state response of the systems resulting from the
+    sinusoidal input $u(k) = 0.5 \sin(0.4 k)$.
+    \begin{enumerate}[label=\alph*.]
+        \item $$H(z) = \frac{z}{z-0.4}$$
+        \begin{align*}
+            H(e^{0.4j}) = \frac{e^{0.4j}}{e^{0.4j}-0.4} \approx 1.537e^{-0.242j}\\
+            y_{ss}(k)\approx 0.5(1.537)\sin(0.4k-0.242) \approx 0.769\sin(0.4k-0.242)
+        \end{align*} 
+        \item $$H(z) = \frac{z}{z^2+0.4z+0.03}$$
+        \begin{align*}
+            H(e^{0.4j}) = \frac{e^{0.4j}}{e^{0.8j}+0.4e^{0.4j}+0.03} \approx 0.714e^{-0.273j}\\
+            y_{ss}(k)\approx 0.5(0.714)\sin(0.4k-0.273) \approx 0.357\sin(0.4k-0.273)
+        \end{align*}
+    \end{enumerate}
+\end{problem}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
