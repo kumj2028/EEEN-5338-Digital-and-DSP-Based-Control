@@ -86,8 +86,97 @@ EEEN 5338 Digital and DSP Based Control} %if necessary, replace with your course
 \begin{problem}{1} %You can use theorem, exercise, problem, or question here.  Modify x.yz to be whatever number you are proving
     Many chemical processes can be modeled by the following transfer function:
     $$G(s) = \frac{K}{\tau s+1}e^{-T_{d}s}$$
-    where $K$ is the gain, $\tau$ is the time constant, and $T_d$ is the time delay. Obtain the transfer function $G_{zas}(z)$ for the system in terms of the system parameters. Assume that the time delay $T_d$ is a multiple of the sampling period $T$.
-
+    where $K$ is the gain, $\tau$ is the time constant, and $T_d$ is the time delay. Obtain the transfer function $G_{ZAS}(z)$ for the system in terms of the system parameters. Assume that the time delay $T_d$ is a multiple of the sampling period $T$.
+    \begin{enumerate}[label=\alph*.]
+      \item Partial fraction expansion:
+      \begin{align*}
+        \frac{G(s)}{s} = \frac{K}{s(\tau s+1)}e^{-T_ds} = \left(\frac{A}{s}+\frac{B}{\tau s+1}\right)e^{-T_ds}\\
+        K = (\tau s+1)A + sB\\
+        s=0\implies K = A\\
+        s=-\frac{1}{\tau} \implies K= -\frac{B}{\tau} \implies B = -\tau K\\
+        \implies \frac{G(s)}{s} = \left(\frac{K}{s} - \frac{\tau K}{\tau s + 1}\right)e^{-T_ds} = \left(\frac{K}{s} - \frac{K}{s + 1/\tau}\right)e^{-T_ds} 
+      \end{align*} 
+      \item $z$-transfer function:
+      \begin{align*}
+        G_{ZAS}(z) = (1-z^{-1})\mathcal{Z}\left\{\frac{G(s)}{s}\right\}=(1-z^{-1})\mathcal{Z}\left\{\left(\frac{K}{s}-\frac{K}{s+1/\tau}\right)e^{-T_ds}\right\}\\
+        = (1-z^{-1})\left(\frac{Kz}{z-1}-\frac{Kz}{z-e^{-T/\tau}}\right)z^{-T_d/T}\\
+        \text{using Wolfram Alpha to simplify the algebra:}\\
+        G_{ZAS}(z)=\frac{(e^{-T/\tau}-1)K}{e^{-T/\tau}-z}z^{-T_d/T}
+      \end{align*} 
+  \end{enumerate}
+\end{problem}
+\pagebreak
+\begin{problem}{2}
+  For an internal combustion engine, the transfer function with injected fuel rate as input and fuel flow rate into the cylinder as output is given by:
+  $$G(s) = \frac{\varepsilon\tau s + 1}{\tau s + 1}$$
+  where $\tau$ is a time constant and $\varepsilon$ is known as the fuel split parameter. Obtain the transfer function $G_{ZAS}(z)$ for the system in terms of the system parameters.
+  \begin{enumerate}[label=\alph*.]
+    \item Partial fraction expansion:
+    \begin{align*}
+      \frac{G(s)}{s} =\frac{\varepsilon\tau s + 1}{s(\tau s + 1)} = \frac{A}{s}+\frac{B}{\tau s+1}\\
+      \varepsilon\tau s + 1 = (\tau s+1)A + sB\\
+      s=0\implies 1 = A\\
+      s=-\frac{1}{\tau} \implies -\varepsilon + 1= -\frac{B}{\tau} \implies B = \varepsilon\tau - \tau\\
+      \implies \frac{G(s)}{s} = \frac{1}{s} + \frac{\varepsilon\tau-\tau}{\tau s + 1} = \frac{1}{s} + \frac{\varepsilon - 1}{s + 1/\tau}
+    \end{align*} 
+    \item $z$-transfer function:
+    \begin{align*}
+      G_{ZAS}(z) = (1-z^{-1})\mathcal{Z}\left\{\frac{G(s)}{s}\right\}=(1-z^{-1})\mathcal{Z}\left\{\frac{1}{s} + \frac{\varepsilon - 1}{s + 1/\tau}\right\}\\
+      = (1-z^{-1})\left(\frac{z}{z-1}+\frac{z(\varepsilon-1)}{z-e^{-T/\tau}}\right)\\
+      \text{using Wolfram Alpha to simplify the algebra:}\\
+      G_{ZAS}(z)=1+\frac{(\varepsilon-1)(z-1)}{z-e^{-T/\tau}}
+    \end{align*} 
+\end{enumerate}
+\end{problem}
+\pagebreak
+\begin{problem}{3}
+Repeat \textbf{Problem 2} including a delay of 25 ms in the transfer function with a sampling period of 10 ms.
+\begin{enumerate}[label=\alph*.]
+  \item Transport delay:
+  \begin{align*}
+    T_d = lT - mT, \text{ where $l$ is a positive integer and $0\leq m < 1$}\\
+    25 = l(10) - m(10) = 3(10) - 0.5(10)\\
+    \implies l=3,\; m=0.5
+  \end{align*} 
+  \item $z$-transfer function:
+  \begin{align*}
+    G_{ZAS}(z) = (1-z^{-1})\left(\frac{z}{z-1} + \frac{z(\varepsilon-1)e^{-5/\tau}}{z-e^{-T/\tau}}\right)z^{-3}\\
+    \text{using Wolfram Alpha to simplify the algebra:}\\
+    G_{ZAS}(z)=\left(1+\frac{(\varepsilon-1)(z-1)e^{-5/\tau}}{z-e^{-T/\tau}}\right)z^{-3}
+  \end{align*} 
+\end{enumerate}
+\end{problem}
+\pagebreak
+\begin{problem}{4}
+  Find the equivalent sampled impulse response sequence and the equivalent $z$-transfer function for the cascade of the two analog systems with sampled input
+  $$H_1(s) = \frac{1}{s+6}$$
+  $$H_2(s) = \frac{10}{s+1}$$
+  \begin{enumerate}[label=\alph*.]
+    \item If the systems are directly connected
+    \begin{align*}
+      H(s) = H_1(s)H_2(s) = \frac{10}{(s+6)(s+1)} = \frac{A}{s+6} + \frac{B}{s+1}\\
+      10 = (s+1)A + (s+6)B\\
+      s= -6 \implies 10 = -5A \implies A = -2\\
+      s=-1 \implies 10 = 5B \implies B = 2\\
+      H(s) = \frac{-2}{s+6} + \frac{2}{s+1}\\
+      h(t) = -2e^{-6t} + 2e^{-t}\\
+      \text{sampled impulse response: } h(kT) = -2e^{-6kT} + 2e^{-kT},\;k\in\N\\
+      \text{$z$-transfer function: } H(z) = \frac{-2z}{z-e^{-6T}} + \frac{2z}{z-e^{-T}} = \frac{2z(e^{-T} - e^{-6T})}{(z-e^{-6T})(z-e^{-T})}
+    \end{align*} 
+    \item If the systems are separated by a sampler
+    \begin{align*}
+      H_1(z) = \frac{z}{z-e^{-6T}}\\
+      H_2(z) = \frac{10z}{z-e^{-T}}\\
+      \text{$z$-transfer function: } H(z) = \frac{10z^2}{(z-e^-6T)(z-e^{-T})}\\
+      \text{partial fraction expansion: }\frac{10z^2}{(z-e^{-6T})(z-e^{-T})} = \frac{Az}{z-e^{-6T}}+\frac{Bz}{z-e^{-T}}\\
+      10z = (z-e^{-T})A + (z-e^{-6T})B\\
+      z=e^{-6T} \implies 10e^{-6T} = (e^{-6T} - e^{-T})A \implies A = \frac{10e^{-6T}}{e^{-6T}-e^{-T}}\\
+      z=e^{-T} \implies 10e^{-T} = (e^{-T} - e^{-6T})B \implies B = \frac{10e^{-T}}{e^{-T} - e^{-6T}}\\
+      H(z) = \frac{10e^{-6T}z}{(e^{-6T}-e^{-T})(z-e^{-6T})}+\frac{10e^{-T}z}{(e^{-T}-e^{-6T})(z-e^{-T})}\\
+      = \frac{10}{e^{-6T}-e^{-T}}\left(\frac{e^{-6T}z}{z-e^{-6T}}-\frac{e^{-T}z}{z-e^{-T}}\right)\\
+      \text{sampled impulse response: } h(kT) = \frac{10}{e^{-6T} - e^{-T}}(e^{-6(k+1)T}-e^{-(k+1)T}),\;k\in\N
+    \end{align*} 
+  \end{enumerate}
 \end{problem}
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
