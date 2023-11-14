@@ -29,7 +29,7 @@
 \tikzset{
 block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
 tmp/.style  = {coordinate}, 
-sum/.style= {draw, fill=white, circle, node distance=1cm},
+sum/.style= {draw, fill=white, circle},
 input/.style = {coordinate},
 output/.style= {coordinate},
 pinstyle/.style = {pin edge={to-,thin,black}
@@ -107,20 +107,62 @@ EEEN 5338 Digital and DSP Based Control} %if necessary, replace with your course
         \text{Solve for the highest power of $z$ operating on the output, $X(z)$,}\\
         z^2X(z) = (1899z^2-3761z+1861)E(z) - (-1.908z + 0.9075)X(z)\\
         \text{Solving for X(z) on the left-hand side,}\\
-        X(z) = (1899-3761z^{-1}+1861z^{-2})E(z) - (-1.908z^{-1}+0.9075z^{-2})X(z)
+        X(z) = (1899-3761z^{-1}+1861z^{-2})E(z) - (-1.908z^{-1}+0.9075z^{-2})X(z)\\
+        \text{Taking the inverse $z$-transform and substituting in $T=0.1$,}\\
+        x^*(t) = 1899e^*(t) - 3761e^*(t-0.1) + 1861e^*(t-0.2) + 1.908x^*(t-0.1) - 0.9075x^*(t-0.2)
     \end{align*}
 
     \begin{tikzpicture}[auto, node distance=2.5cm]
-        \node [input, name=ein] (ein) {};
+        \node [input] (ein) {};
         \node [tmp, right of=ein] (tmp1) {};
         \node [block, right of=tmp1] (a2b2) {1899};
-        \node [block, below of=tmp1] (delay1) {Delay $T$};
-        \node [tmp, below of=delay1] (tmp2) {};
-        \node [block, right of=tmp2] (c_z) {$C(z)$};
-        \node [block, right of=c_z] (dac) {DAC};
-        \node [block, right of=dac] (g_s) {$G(s)$};
-        \node [block, right of=g_s] (adc) {ADC}; 
-        \node [output, right of=adc, node distance=2cm] (output) {};
+        \node [tmp, right of=a2b2] (tmp2) {};
+        \node [block, below of=tmp1] (delay1) {Delay 0.1};
+        \node [tmp, below of=delay1] (tmp3) {};
+        \node [block, right of=tmp3] (a1b2) {3761};
+        \node [sum, right of=a1b2] (sum1) {};
+        \node [block, below of=tmp3] (delay2) {Delay 0.1};
+        \node [tmp, below of=delay2] (tmp4) {};
+        \node [block, right of=tmp4] (a0b2) {1861};
+        \node [tmp, right of=a0b2] (tmp5) {};
+        \node [sum, right of=sum1, node distance=1cm] (sum2) {}; 
+        \node [block, right of=sum2] (b1b2) {1.908};
+        \node [tmp, right of=b1b2] (tmp6) {};
+        \node [block, above of=tmp6] (delay3) {Delay 0.1};
+        \node [tmp, above of=delay3] (tmp7) {};
+        \node [output, right of=tmp7] (xout) {};
+        \node [block, below of=tmp6] (delay4) {Delay 0.1};
+        \node [tmp, below of=delay4] (tmp8) {};
+        \node [block, left of=tmp8] (b0b2) {0.9075};
+        \node [tmp, left of=b0b2] (tmp9) {};
+
+        \draw [-] (ein) -- node{$e^*(t)$} (tmp1);
+        \draw [->] (tmp1) -- (a2b2);
+        \draw [-] (a2b2) --  (tmp2);
+        \draw [->] (tmp2) -- node{+} (sum1);
+        \draw [->] (tmp1) -- (delay1);
+        \draw [-] (delay1) -- (tmp3);
+        \draw [->] (tmp3) -- node{$e^*(t-0.1)$} (a1b2);
+        \draw [->] (a1b2) -- node{-} (sum1);
+        \draw [->] (tmp3) -- (delay2);
+        \draw [-] (delay2) -- (tmp4);
+        \draw [->] (tmp4) -- node{$e^*(t-0.2)$} (a0b2);
+        \draw [-] (a0b2) -- (tmp5);
+        \draw [->] (tmp5) -- node{+} (sum1);
+        \draw [->] (sum1) -- node{+} (sum2);
+        \draw [->] (b1b2) -- node{+} (sum2);
+        \draw [->] (tmp6) -- node{$x^*(t-0.1)$} (b1b2);
+        \draw [-] (delay3) -- (tmp6);
+        \draw [->] (tmp7) -- (delay3);
+        \draw [->] (tmp7) -- node{$x^*(t)$} (xout);
+        \draw [-] (tmp7) -| (sum2);
+        \draw [->] (tmp6) -- (delay4);
+        \draw [-] (delay4) -- (tmp8);
+        \draw [->] (tmp8) -- node{$x^*(t-0.2)$} (b0b2);
+        \draw [-] (b0b2) -- (tmp9);
+        \draw [->] (tmp9) -- node{-} (sum2);
+
+        % \node [output, right of=adc, node distance=2cm] (output) {};
         % \node [tmp, below of=sum1] (tmp1) {};
         % \draw [->] (ein) -- node{$e*(t)$} (sum1);
         % \draw [->] (sum1) --node{$E(z)$} (c_z);
